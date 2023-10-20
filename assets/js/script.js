@@ -13,7 +13,7 @@ var cityArr = [];
 var cities = 'cities';
 var fetchCurrentURL = "";
 var fetchFutureURL = "";
-var newCityBtn = $('.newCitybtn');
+var newCityBtn = $('.newCityBtn');
 var arrayStorage = JSON.parse(localStorage.getItem(cities));
 var arrayStorageLength = 0;
 
@@ -22,7 +22,7 @@ console.log(arrayStorage);
 if (arrayStorage != null) {
   arrayStorageLength = arrayStorage.length;
   arrayStorage.forEach((cityName) => {
-    var newCityBtn = $(`<button type="button" class="newCityBtn">${cityName}</button>`);
+    var newCityBtn = $(`<input type="button" class="newCityBtn" id="uni" value='${cityName}'>`);
     $("#searchCard").append(newCityBtn);
   })
 }
@@ -170,7 +170,7 @@ function getFutureAPI(lat, lon) {
 }
 
 function addCityBtn(city) {
-  var newCityBtn = $(`<button type="button" class="newCityBtn">${city}</button>`);
+  var newCityBtn = $(`<input type="button" class="newCityBtn" id="uni" value='${city}'>`);
   console.log(localStorage.getItem(cities));
   if (localStorage.getItem(cities)===null) {
     console.log("added " + city);
@@ -220,11 +220,90 @@ function kelvinToF(kDegree) {
 }
 
 apiBtn.on("click", getCurrentApi);
-// newCityBtn.on("click", runCard);
 
-// function runCard() {
-  
-// }
+$(document).ready(function() {
+  $(document).on("click", "input.newCityBtn", runCard);
+})
+
+
+
+
+function runCard(event) {
+  event.preventDefault();
+  city = $(this).val();
+  alert(city);
+  fetchCurrentURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+  fetch(fetchCurrentURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data);
+      // cityArr.push(city);
+      console.log(cityArr);
+      cityArr = arrayStorage;
+      console.log(cityArr);
+      // localStorage.setItem(cities, JSON.stringify(cityArr));
+      // arrayStorage = JSON.parse(localStorage.getItem(cities));
+      // arrayStorageLength = arrayStorage.length;
+      console.log("Local Length: " + arrayStorageLength);
+      // localStorage.cityArr.push('city');
+      // console.log(JSON.parse(localStorage.getItem(cities))[0]);
+      // for (var i = 0; i < JSON.parse(localStorage.getItem(cities)).length; i++) {
+      //   console.log(JSON.parse(localStorage.getItem(cities))[i]);
+      //   console.log(JSON.parse(localStorage.getItem(cities)).length);
+      // }
+      // localStorage.setItem(cities, JSON.stringify(city));
+      // console.log(localStorage.getItem(cities))
+      // .push(city);
+
+      var currentDate = currentTime.format("MM/DD/YYYY");
+      var currentTemp = kelvinToF(data.main.temp);
+      var currentWind = data.wind.speed;
+      var currentHumidity = data.main.humidity;
+      var currentIcon = data.weather[0].icon;
+      var currentIconURL = "http://openweathermap.org/img/w/" + currentIcon + ".png";
+      lat = data.coord.lat.toFixed(2);
+      lon = data.coord.lon.toFixed(2);
+
+      if (currentWeatherCard === "") {
+        currentWeatherCard = $(`<div class="col" id="dataCard">
+        <div id="topCard">
+          <h2>${city} ${currentDate}<img id="icon" src=${currentIconURL} alt="Weather Icon"></h2>
+          <p>Temp: ${currentTemp}&#8457;</p>
+          <p>Wind: ${currentWind} MPH</p>
+          <p>Humidity: ${currentHumidity}%</p>
+        </div>
+        `);
+
+        $('#category').append(currentWeatherCard);
+      }
+
+      else {
+        currentWeatherCard.remove();
+        currentWeatherCard = $(`<div class="col" id="dataCard">
+        <div id="topCard">
+          <h2>${city} ${currentDate}<img id="icon" src=${currentIconURL} alt="Weather Icon"></h2>
+          <p>Temp: ${currentTemp}&#8457;</p>
+          <p>Wind: ${currentWind} MPH</p>
+          <p>Humidity: ${currentHumidity}%</p>
+        </div>
+        <div class="container text-center">
+          <h3>5-Day Forecast</h3>
+          <div class="row align-items-start" id="beginDay">
+        `);
+        $('#category').append(currentWeatherCard);
+      }
+
+
+      getFutureAPI(lat, lon);
+
+    })
+}
+
+// $(document).ready(function () {
+//   cityBtn.on("click", runCard);
+// })
 
 // cityBtn.on("click", runSearch);
 // console.log(kelvinToF(275));
