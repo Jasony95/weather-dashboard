@@ -26,7 +26,7 @@ To install the project, you will need to download the folder and then open it th
 
 GitHub Link: https://github.com/Jasony95/weather-dashboard
 
-GitHub Page: 
+GitHub Page: https://jasony95.github.io/weather-dashboard/
 
 ## Usage
 
