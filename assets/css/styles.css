@@ -6,7 +6,7 @@
 
 header {
   flex: auto;
-  background-color: blue;
+  background-color: #4F359B;
 }
 
 .main-header {
@@ -15,11 +15,11 @@ header {
 }
 
 #searchCard {
-  background-color: green;
+  background-color: #585191;
 }
 
 #dataCard {
-  background-color: red;
+  background-color: #B5BA72;
 }
 
 .newCityBtn {
@@ -27,6 +27,14 @@ header {
   margin: auto;
   margin-top: 10px;
   padding: 5px;
+}
+
+#category {
+  background-color: #99907D
+}
+
+h2 {
+  color: white;
 }
 
 /* #category {
